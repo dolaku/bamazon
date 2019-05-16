@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
 
     // Your port
@@ -11,16 +11,26 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "",
+    password: "root",
     database: "bamazon_db"
 });
 
 
-connection.connect(function (err) {
+connection.connect((err) => {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
 
-
+    displayAllProducts()
 
     connection.end();
 });
+
+
+let displayAllProducts = () => {
+    connection.query("SELECT * FROM products", (err, res) => {
+        if (err) throw err;
+
+        // Log all results of the SELECT statement
+        console.table(res);
+    });
+}
