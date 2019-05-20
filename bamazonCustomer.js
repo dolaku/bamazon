@@ -21,9 +21,16 @@ connection.connect((err) => {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
 
-    displayAllProducts();
+    // get data from database
+    connection.query("SELECT * FROM products;", (err, products) => {
+        if (err) throw err;
 
-    inquirer
+        // Log all results of the SELECT statement
+        console.table(products);
+        console.log('\r');
+        
+        // Ask item to buy && quantity
+        inquirer
         .prompt([
             {
                 type: 'input',
@@ -37,20 +44,34 @@ connection.connect((err) => {
         ]).then( (answer) => {
             let itemID = parseFloat(answer.itemID);
             let quantity = parseFloat(answer.quantity);
-            console.log('itemID ' + itemID);
-            console.log('qty ' + quantity);
-        });
+            
+            // if there is enough stock for the chosen product
+            if ( checkAvail(products, itemID, quantity) ) {
+                console.log(`Successfully purchased ${quantity}`);
 
-    connection.end();
+                // Fulfill order - Update qty
+
+
+
+            } else {
+                console.log('Sorry, there is not enough in stock.');
+            }
+            
+            
+            
+        });
+        
+        connection.end();
+    });
 });
 
 
-let displayAllProducts = () => {
-    connection.query("SELECT item_id AS ID, product_name AS Product, price AS Price FROM products;", (err, data) => {
-        if (err) throw err;
-
-        // Log all results of the SELECT statement
-        console.log('\r');
-        console.table(data);
-    });
+// check if there is enough stock for order
+let checkAvail = (data, id, qty) => {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].item_id === id && data[i].stock_quantity >= qty) {
+            return true;
+        }
+    }
+    return false;
 }
