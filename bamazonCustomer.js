@@ -20,7 +20,7 @@ connection.connect((err) => {
 
 // get data from database and ask which item to buy
 let displayAll = () => {
-    connection.query("SELECT * FROM products;", (err, products) => {
+    connection.query("SELECT item_id AS ID, product_name AS Product, price AS Price, stock_quantity AS 'Qty Available' FROM products;", (err, products) => {
         if (err) throw err;
 
         // Log all results of the SELECT statement
@@ -50,7 +50,8 @@ let displayAll = () => {
                     updateProducts(itemID, quantity);
 
                 } else {
-                    console.log('Sorry, there is not enough in stock.');
+                    console.log('\nSorry, there is not enough in stock.');
+                    shopOrExit();
                 }
             });
     });
@@ -93,25 +94,30 @@ let updateProducts = (id, orderQty) => {
                     console.log(`Quantity: ${orderQty}`);
                     console.log(`Total: $${totalPrice}\n`);
 
-                    // buy more or exit
-                    inquirer
-                        .prompt([
-                            {
-                                type: 'list',
-                                name: 'buyMore',
-                                message: 'Continue shopping?'.green,
-                                choices: ['Yes, I want to buy more.', 'No, exit.']
-                            }
-                        ]).then((answer) => {
-                            switch (answer.buyMore) {
-                                case 'Yes, I want to buy more.':
-                                    displayAll();
-                                    break;
-                                case 'No, exit.':
-                                    connection.end();
-                                    break;
-                            }
-                        })
+                    shopOrExit();
                 });
         });
+}
+
+
+// buy more or exit
+let shopOrExit = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'buyMore',
+                message: 'Continue shopping?'.green,
+                choices: ['Yes, I want to buy more.', 'No, exit.']
+            }
+        ]).then((answer) => {
+            switch (answer.buyMore) {
+                case 'Yes, I want to buy more.':
+                    displayAll();
+                    break;
+                case 'No, exit.':
+                    connection.end();
+                    break;
+            }
+        })
 }
