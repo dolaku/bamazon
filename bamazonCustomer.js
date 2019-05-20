@@ -60,7 +60,9 @@ let displayAll = () => {
 // check if there is enough stock for order
 let checkAvail = (data, id, qty) => {
     for (let i = 0; i < data.length; i++) {
-        if (data[i].item_id === id && data[i].stock_quantity >= qty) {
+        let prodID = data[i].ID;
+        let prodQty = data[i]['Qty Available'];
+        if (prodID === id && prodQty >= qty) {
             return true;
         }
     }

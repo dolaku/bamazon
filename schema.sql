@@ -24,4 +24,5 @@ VALUES ('t-shirt','apparel',3.50,80),
 ('baking sheet','kitchen',16.99,10);
 
 SELECT * FROM products;
+SELECT item_id AS ID, product_name AS Product, price AS Price, stock_quantity AS 'Qty Available' FROM products;
 
