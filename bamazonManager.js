@@ -18,6 +18,7 @@ connection.connect((err) => {
     managerView();
 });
 let managerView = () => {
+    console.log('\r');
     inquirer
         .prompt([
             {
