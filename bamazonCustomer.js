@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-let colors = require('colors');
+const colors = require('colors');
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
@@ -31,9 +31,17 @@ let displayAll = () => {
         inquirer
             .prompt([
                 {
-                    type: 'input',
+                    type: 'list',
                     name: 'itemID',
-                    message: 'Enter product ID to purchase:'.green
+                    message: 'Select the product ID to purchase:'.green,
+                    choices: () => {
+                        // list all items available from db
+                        var availItemsArr = [];
+                        for (let i = 0; i < products.length; i++) {
+                            availItemsArr.push(products[i].ID);
+                        }
+                        return availItemsArr;
+                    }
                 }, {
                     type: 'input',
                     name: 'quantity',
