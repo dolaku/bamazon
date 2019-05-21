@@ -48,7 +48,7 @@ let displayAll = () => {
                     message: 'How many?'.green
                 }
             ]).then((answer) => {
-                let itemID = parseFloat(answer.itemID);
+                let itemID = answer.itemID;
                 let quantity = parseFloat(answer.quantity);
 
                 // if there is enough stock for the chosen product
