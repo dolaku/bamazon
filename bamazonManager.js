@@ -158,8 +158,8 @@ let addProd = () => {
                         message: 'Total Stock:'.green
                     }
                 ]).then((answer) => {
-                    let name = answer.name;
-                    let dept = answer.dept;
+                    let name = answer.name.toLowerCase();
+                    let dept = answer.dept.toLowerCase();
                     let price = parseFloat(answer.price);
                     let stock = parseFloat(answer.stock);
 
